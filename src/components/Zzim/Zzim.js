@@ -36,23 +36,25 @@ export default function Zzim() {
 
   return (
     <div className={styles.zzim}>
-      <div onClick={(onClick = { toggleZzimList })}>찜 상품</div>
-      <div className={styles.zzimList}>
-        <ul>
-          {currentZzims.map((zzim) => (
-            <li>
-              <Link to={`/car/${zzim.id}`} state={{ id: zzim.id }}>
-                <img src={/assets/ + zzim.image} />
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <ZzimPagination
-          currentPage={zzimCurrentPage}
-          totalPages={totalZzimPages}
-          onPageChange={setZzimCurrentPage}
-        />
-      </div>
+      <div onClick={toggleZzimList} className={styles.zzimToggle}>찜 상품</div>
+      {isZzimListVisible && (
+        <div className={styles.zzimList}>
+          <ul>
+            {currentZzims.map((zzim) => (
+              <li>
+                <Link to={`/car/${zzim.id}`} state={{ id: zzim.id }}>
+                  <img src={/assets/ + zzim.image} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ZzimPagination
+            currentPage={zzimCurrentPage}
+            totalPages={totalZzimPages}
+            onPageChange={setZzimCurrentPage}
+          />
+        </div>
+      )}
     </div>
   );
 }

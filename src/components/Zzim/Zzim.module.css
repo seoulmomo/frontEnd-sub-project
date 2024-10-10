@@ -13,10 +13,14 @@
 .zzimList {
   position: absolute;
   width: 130px;
-  height: 460px;
+  height: 480px;
   top: 79px;
   right: 0px;
-  padding: 14px 0;
+  padding-top: 14px;
+  border: 1px solid #ccc;
+}
+.zzimList ul{
+  height: 440px;
 }
 .zzimList li {
   list-style: none;
@@ -26,4 +30,8 @@
 .zzimList img {
   width: 100px;
   height: 75px;
+}
+.zzimToggle {
+  cursor: pointer;
+  height: 100%;
 }
