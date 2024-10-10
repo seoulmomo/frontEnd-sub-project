@@ -1,0 +1,27 @@
+button {
+  background-color: white;
+}
+.pagination,
+.prev,
+.next {
+  position: relative;
+  padding: 40px 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: center;
+}
+.pagination span {
+  text-decoration: none;
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  padding: 0 5px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
+  line-height: 28px;
+}
+.currentPage {
+  color: #d50527;
+  border: 1px solid #d50527;
+}

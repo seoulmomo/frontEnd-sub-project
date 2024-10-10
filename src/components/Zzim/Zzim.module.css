@@ -1,0 +1,29 @@
+.zzim {
+  width: 70px;
+  height: 80px;
+  border: 1px solid black;
+  float: right;
+  position: relative;
+}
+@media (max-width: 1420px) {
+  .zzim {
+    visibility: hidden;
+  }
+}
+.zzimList {
+  position: absolute;
+  width: 130px;
+  height: 460px;
+  top: 79px;
+  right: 0px;
+  padding: 14px 0;
+}
+.zzimList li {
+  list-style: none;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.zzimList img {
+  width: 100px;
+  height: 75px;
+}

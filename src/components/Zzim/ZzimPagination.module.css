@@ -1,0 +1,19 @@
+.zzimPagination {
+  text-align: center;
+}
+.prev,
+.zzimCurrentPage,
+.next {
+  color: #333;
+  cursor: pointer;
+}
+.prev,
+.next {
+  display: inline-block;
+  margin: 0 5px;
+  vertical-align: middle;
+}
+.zzimCurrentPage{
+  height: 10px;
+  font-size: 14px;
+}
