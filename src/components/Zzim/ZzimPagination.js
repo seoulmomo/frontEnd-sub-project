@@ -17,16 +17,6 @@ export default function ZzimPagination({ currentPage, totalPages, onPageChange }
       >
         &lt;
       </button>
-      {/* {pageNumbers.map((num) => (
-        <span
-          key={num}
-          className={num === currentPage ? styles.active : ""}
-          onClick={() => onPageChange(num)}
-        >
-          {num}
-        </span>
-        
-      ))} */}
       <span className={styles.zzimCurrentPage}>{currentPage}/{totalPages}</span>
       <button
         onClick={() => onPageChange(currentPage + 1)}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./MainPage.module.css";
 import { Link } from "react-router-dom";
-import { db } from "../firebase/fbInstance"; // Adjust the import based on your structure
+import { db } from "../firebase/fbInstance";
 import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import Pagination from "./Pagination";
 import Zzim from "./Zzim/Zzim";
@@ -9,16 +9,13 @@ import Zzim from "./Zzim/Zzim";
 export default function MainPage() {
   const [carBrands, setCarBrands] = useState([]);
   const [carList, setCarList] = useState([]);
-  // const [zzimList, setZzimList] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const carsPerPage = 10;
-  // const [zzimCurrentPage, setZzimCurrentPage] = useState(1);
-  // const zzimPerPage = 5;
 
   useEffect(() => {
     const fetchData = async () => {
-      const brandsCollection = collection(db, "carBrands"); // Adjust the collection name as needed
+      const brandsCollection = collection(db, "carBrands");
       const brandsSnapshot = await getDocs(brandsCollection);
       const brands = brandsSnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -26,7 +23,7 @@ export default function MainPage() {
       }));
       setCarBrands(brands);
 
-      const carsCollection = collection(db, "cars"); // Adjust the collection name as needed
+      const carsCollection = collection(db, "cars");
       const carsSnapshot = await getDocs(carsCollection);
 
       const cars = carsSnapshot.docs.map((doc) => ({
@@ -45,7 +42,7 @@ export default function MainPage() {
       return;
     }
     try {
-      const zzimsRef = doc(db, "zzims", car.id); // 자동차 ID를 문서 ID로 사용
+      const zzimsRef = doc(db, "zzims", car.id);
       await setDoc(zzimsRef, {
         id: car.id,
         name: car.name,
@@ -64,10 +61,6 @@ export default function MainPage() {
     indexOfLastCar
   );
   const totalPages = Math.ceil(carList.length / carsPerPage);
-
-  // const lastZzim = zzimCurrentPage * zzimPerPage;
-  // const currentZzims = zzimList.slice(lastZzim - zzimPerPage, lastZzim);
-  // const totalZzimPages = Math.ceil(zzimList.length / zzimPerPage);
 
   return (
     <div>
