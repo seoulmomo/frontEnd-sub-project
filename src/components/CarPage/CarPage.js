@@ -4,30 +4,32 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/fbInstance";
 import styles from "./CarPage.module.css";
 import Zzim from "../Zzim/Zzim";
+import PaymentModal from "../PaymentModal/PaymentModal";
 
 const CarPage = () => {
   const location = useLocation();
   const [data, setData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const id = String(location.state?.id);
 
   useEffect(() => {
     const fetchData = async () => {
       if (!id) {
-        console.error("ID is null or undefined.");
-        return; // id가 유효하지 않을 때 데이터 조회를 멈춤
+        console.error("ID가 null 또는 undefined입니다.");
+        return; // ID가 유효하지 않을 때 데이터 조회 중지
       }
       try {
-        const docRef = doc(db, "cars", id); // Firestore에서 특정 문서 참조
+        const docRef = doc(db, "cars", id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          console.log("Document Data:", docSnap.data());
-          setData(docSnap.data()); // 문서 데이터를 state에 저장
+          console.log("문서 데이터:", docSnap.data());
+          setData(docSnap.data());
         } else {
-          console.log("No such document!");
+          console.log("해당 문서가 없습니다!");
         }
       } catch (error) {
-        console.error("Error fetching document:", error);
+        console.error("문서 조회 중 오류 발생:", error);
       }
     };
 
@@ -37,7 +39,7 @@ const CarPage = () => {
   // 찜 상품 등록
   const handleAddToZzimlist = async () => {
     if (!data) {
-      console.error("No data to add to zzims.");
+      console.error("찜 목록에 추가할 데이터가 없습니다.");
       return;
     }
     try {
@@ -50,8 +52,12 @@ const CarPage = () => {
       });
       alert("차량이 찜 상품에 추가되었습니다!"); // 사용자에게 알림
     } catch (error) {
-      console.error("Error adding to zzims:", error);
+      console.error("찜 목록에 추가 중 오류 발생:", error);
     }
+  };
+
+  const handlePurchaseClick = () => {
+    setIsModalOpen(true); // 결제 모달 열기
   };
 
   return (
@@ -60,7 +66,11 @@ const CarPage = () => {
       {data ? (
         <div className={styles.carMain}>
           <div className={styles.carImg}>
-            <img src={/assets/ + data.image} className={styles.img} />
+            <img
+              src={/assets/ + data.image}
+              className={styles.img}
+              alt={data.name}
+            />
           </div>
           <div className={styles.carInfo}>
             <div className={styles.carName}>
@@ -73,7 +83,7 @@ const CarPage = () => {
               <button type="button" onClick={handleAddToZzimlist}>
                 <span>찜하기</span>
               </button>
-              <button type="button">
+              <button type="button" onClick={handlePurchaseClick}>
                 <span>구매하기</span>
               </button>
             </div>
@@ -82,6 +92,11 @@ const CarPage = () => {
       ) : (
         <div>Loading...</div>
       )}
+      <PaymentModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        carData={data}
+      />
     </div>
   );
 };
