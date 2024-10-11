@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./MainPage.module.css";
 import { Link } from "react-router-dom";
 import { db } from "../firebase/fbInstance"; // Adjust the import based on your structure
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import Pagination from "./Pagination";
 import Zzim from "./Zzim/Zzim";
 
@@ -34,19 +34,29 @@ export default function MainPage() {
         ...doc.data(),
       }));
       setCarList(cars);
-
-      // const zzimsCollection = collection(db, "zzims");
-      // const zzimsSnapshot = await getDocs(zzimsCollection);
-
-      // const zzims = zzimsSnapshot.docs.map((doc) => ({
-      //   id: doc.id,
-      //   ...doc.data(),
-      // }));
-      // setZzimList(zzims);
     };
 
     fetchData();
   }, []);
+
+  const handleAddToZzimlist = async (car) => {
+    if (!car) {
+      console.error("zzims에 추가할 데이터가 없습니다.");
+      return;
+    }
+    try {
+      const zzimsRef = doc(db, "zzims", car.id); // 자동차 ID를 문서 ID로 사용
+      await setDoc(zzimsRef, {
+        id: car.id,
+        name: car.name,
+        price: car.price,
+        image: car.image,
+      });
+      alert("차량이 찜 상품에 추가되었습니다!");
+    } catch (error) {
+      console.error("zzims에 추가하는 중 오류 발생:", error);
+    }
+  };
 
   const indexOfLastCar = currentPage * carsPerPage;
   const currentCars = carList.slice(
@@ -90,7 +100,7 @@ export default function MainPage() {
           <div className={styles.brandCar}>
             <ul className={styles.carList}>
               {currentCars.map((car) => (
-                <li key={car.id}>
+                <li key={car.id} state={{ id: car.id }}>
                   <Link to={`/car/${car.id}`} state={{ id: car.id }}>
                     <img
                       src={/assets/ + car.image}
@@ -104,6 +114,7 @@ export default function MainPage() {
                         type="button"
                         value="찜"
                         className={styles.carZzim}
+                        onClick={() => handleAddToZzimlist(car)}
                       />
                     </span>
                   </Link>

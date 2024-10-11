@@ -34,4 +34,18 @@
 .zzimToggle {
   cursor: pointer;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.zzimToggle img{
+  width: 100%;
+  background-color: white;
+}
+.zzimTitle{
+  font-size: 14px;
+}
+.zzimLength{
+  margin: 0 3px;
 }
