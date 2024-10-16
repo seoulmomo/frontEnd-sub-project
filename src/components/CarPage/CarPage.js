@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/fbInstance";
 import styles from "./CarPage.module.css";
@@ -11,6 +11,9 @@ const CarPage = () => {
   const [data, setData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const id = String(location.state?.id);
+  const [quantity, setQuantity] = useState(1);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +26,6 @@ const CarPage = () => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          console.log("문서 데이터:", docSnap.data());
           setData(docSnap.data());
         } else {
           console.log("해당 문서가 없습니다!");
@@ -51,8 +53,29 @@ const CarPage = () => {
         image: data.image,
       });
       alert("차량이 찜 상품에 추가되었습니다!"); // 사용자에게 알림
+      navigate("/cart");
     } catch (error) {
       console.error("찜 목록에 추가 중 오류 발생:", error);
+    }
+  };
+
+  const handleAddToCartList = async () => {
+    if (!data) {
+      console.log("장바구니에 담을 데이터가 없습니다.");
+      return;
+    }
+    try {
+      const cartItemsRef = doc(db, "cartItems", id);
+      await setDoc(cartItemsRef, {
+        id: data.id,
+        name: data.name,
+        price: data.price,
+        image: data.image,
+        quantity: quantity,
+      });
+      alert("차량이 장바구니에 추가되었습니다.");
+    } catch (error) {
+      console.log("장바구니에 추가 중 오류 발생", error);
     }
   };
 
@@ -83,9 +106,12 @@ const CarPage = () => {
               <button type="button" onClick={handleAddToZzimlist}>
                 <span>찜하기</span>
               </button>
-              <button type="button" onClick={handlePurchaseClick}>
-                <span>구매하기</span>
+              <button type="button" onClick={handleAddToCartList}>
+                <span>장바구니 담기</span>
               </button>
+              {/* <button type="button" onClick={handlePurchaseClick}>
+                <span>구매하기</span>
+              </button> */}
             </div>
           </div>
         </div>

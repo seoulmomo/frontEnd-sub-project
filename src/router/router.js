@@ -9,6 +9,9 @@ import CarCategory from "../components/CarCategory/CarCategory";
 // import KakaoHandler from "../components/Login/KakaoHandler";
 // import UploadData from "../components/UploadData";
 // import SignIn from "../components/SignIn";
+import Test from "../components/Test";
+import PayResult from "../components/PayResult";
+import Cart from "../components/Cart/Cart";
 
 const Router = () => {
   return (
@@ -20,6 +23,9 @@ const Router = () => {
       <Route path="/auth/kakao/callback" element={<KakaoAuth />} />
       <Route path="/:name" element={<CarBrand />} />
       <Route path="/carCategory/:name" element={<CarCategory />} />
+      <Route path="paypay" element={<Test />} />
+      <Route path="PayResult" element={<PayResult />} />
+      <Route path="cart" element={<Cart />} />
     </Routes>
   );
 };

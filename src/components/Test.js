@@ -1,19 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import styles from "./PaymentModal.module.css";
 
-const PaymentModal = ({ isOpen, onClose, carData }) => {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+const Test = () => {
   const [redirectUrl, setRedirectUrl] = useState(""); // 리다이렉트 URL을 저장할 상태
 
   const handlePayment1m = async () => {
-    if (!name || !phone || !address) {
-      alert("모든 필드를 입력하세요.");
-      return;
-    }
-
     try {
       const response = await axios.post(
         "https://kapi.kakao.com/v1/payment/ready",
@@ -22,8 +13,8 @@ const PaymentModal = ({ isOpen, onClose, carData }) => {
           partner_order_id: "partner_order_id", // 가맹점 주문번호
           partner_user_id: "partner_user_id", // 가맹점 회원 ID
           item_name: "상품판매",
-          quantity: carData.quantity,
-          total_amount: carData.price, // 결제 금액
+          quantity: 1,
+          total_amount: 5500, // 결제 금액
           tax_free_amount: 0,
           approval_url: "http://localhost:3000/PayResult", // 결제 성공 시 리다이렉트할 URL
           cancel_url: "http://localhost:3000/kakaoPay", // 결제 취소 시 리다이렉트할 URL
@@ -48,46 +39,13 @@ const PaymentModal = ({ isOpen, onClose, carData }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
-        <h2>구매하기</h2>
-        <label>
-          이름:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          전화번호:
-          <input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          주소:
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            required
-          />
-        </label>
-        <span onMouseOver={handlePayment1m}>
-          <a href={redirectUrl}>결제하기</a>
-        </span>
-        <button onClick={onClose}>닫기</button>
+    <div>
+      <div onMouseOver={handlePayment1m}>
+        <a href={redirectUrl}>결제</a> {/* 상태 변수를 링크로 사용 */}
       </div>
     </div>
   );
 };
 
-export default PaymentModal;
+export default Test;
