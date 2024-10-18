@@ -66,6 +66,12 @@ const LinkA = styled(Link)`
     padding: 16px 13px 0;
     color: white;
   }
+  &.cart {
+    display: block;
+    position: relative;
+    padding: 16px 13px 0;
+    color: white;
+  }
   &.loginBtn {
     color: white;
     font-size: 16px;
@@ -86,6 +92,10 @@ const Nav = () => {
   const location = useLocation();
   const category = String(location.state?.category);
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredCars, setFilteredCars] = useState([]);
+  const [carList, setCarList] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       const categorysCollection = collection(db, "carCategories");
@@ -95,6 +105,15 @@ const Nav = () => {
         ...doc.data(),
       }));
       setCarCategory(categorys);
+
+      const carsCollection = collection(db, "cars");
+      const carsSnapshot = await getDocs(carsCollection);
+      const cars = carsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setCarList(cars);
+      setFilteredCars(cars);
     };
     fetchData();
 
@@ -112,6 +131,23 @@ const Nav = () => {
     authService.signOut();
     navigate("/");
   };
+
+  const handleFocus = () => {
+    setFilteredCars(carList); // 모든 차량 데이터를 필터링된 목록에 설정
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // 입력한 검색어를 포함한 차량 목록 필터링
+    const filtered = carList.filter((car) =>
+      car.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredCars(filtered);
+  };
+
+  console.log(filteredCars);
   return (
     <Head>
       <Header className="header">
@@ -150,12 +186,35 @@ const Nav = () => {
                   <b className={styles.sell}>차 비교</b>
                 </LinkA>
               </CarTypeList>
+              <CarTypeList>
+                <LinkA to={"/cart"} className="cart">
+                  <b className={styles.sell}>장바구니</b>
+                </LinkA>
+              </CarTypeList>
             </>
           ) : (
             <></>
           )}
         </CarType>
-
+        <div className={styles.searchInput}>
+          <input
+            type="text"
+            placeholder="차량 검색"
+            value={searchQuery}
+            onChange={handleSearchChange} // 입력값 변경 시 상태 업데이트
+            onFocus={handleFocus} // 포커스 시 전체 차량 목록 표시
+            className={styles.inputField}
+          />
+          {searchQuery && (
+            <ul>
+              {filteredCars.map((filteredCar) => (
+                <li key={filteredCar.id}>
+                  <span>{filteredCar.name}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         <Login className="login">
           {isLoggedIn ? (
             <LogOutBtn onClick={onLogOut}>로그아웃</LogOutBtn>
