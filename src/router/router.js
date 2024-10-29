@@ -4,7 +4,7 @@ import MainPage from "../components/MainPage";
 import SignUp from "../components/SignUp/SignUp";
 import CarPage from "../components/CarPage/CarPage";
 import KakaoAuth from "../components/Login/KakaoAuth";
-import CarBrand from "../components/CarBrand/CarBrand";
+import CarBrand from "../components/CarBrand/CarBrand.js";
 import CarCategory from "../components/CarCategory/CarCategory";
 // import KakaoHandler from "../components/Login/KakaoHandler";
 // import UploadData from "../components/UploadData";
